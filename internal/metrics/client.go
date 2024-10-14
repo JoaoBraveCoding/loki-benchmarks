@@ -118,9 +118,9 @@ func (c *Client) MeasureBoltDBShipperRequestMetrics(
 ) error {
 	switch path {
 	case WriteRequestPath:
-		return c.Measure(e, RequestBoltDBShipperRequestRate(BoltDBShipperWriteName, job, BoltDBWriteOperation, "2.*", sampleRange))
+		return c.Measure(e, RequestIndexRequestRate(IndexWriteName, job, WriteOperation, "2.*", sampleRange))
 	case ReadRequestPath:
-		return c.Measure(e, RequestBoltDBShipperRequestRate(BoltDBShipperReadName, job, BoltDBReadOperation, "2.*", sampleRange))
+		return c.Measure(e, RequestIndexRequestRate(IndexReadName, job, ReadOperation, "2.*", sampleRange))
 	default:
 		return fmt.Errorf("error unknown path specified: %d", path)
 	}
@@ -138,6 +138,10 @@ func (c *Client) MeasureResourceUsageMetrics(
 
 	if c.isCAdvisorEnabled {
 		if err := c.Measure(e, ContainerMemoryWorkingSetBytes(job, sampleRange, annotation)); err != nil {
+			return err
+		}
+
+		if err := c.Measure(e, ContainerGoMemstatsHeapInuse(job, sampleRange, annotation)); err != nil {
 			return err
 		}
 	}

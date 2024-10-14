@@ -94,13 +94,14 @@ operator() {
         pushd ../loki/operator || exit 1
         if $IS_OPENSHIFT; then
             kubectl create namespace openshift-operators-redhat
+            kubectl label ns/openshift-operators-redhat openshift.io/cluster-monitoring=true --overwrite 
             kubectl label ns/$BENCHMARK_NAMESPACE openshift.io/cluster-monitoring=true --overwrite 
 
-            make olm-deploy "REGISTRY_BASE=quay.io/$operator_registry" "VERSION=v0.0.1-$(git rev-parse --short HEAD)" VARIANT=openshift
+            make olm-deploy "REGISTRY_BASE=quay.io/$operator_registry" "VERSION=0.0.1-$(git rev-parse --short HEAD)" VARIANT=openshift
             ./hack/deploy-aws-storage-secret.sh $storage_bucket
             kubectl -n $BENCHMARK_NAMESPACE apply -f hack/lokistack_gateway_ocp.yaml
         else
-            make olm-deploy "REGISTRY_BASE=quay.io/$operator_registry" "VERSION=v0.0.1-$(git rev-parse --short HEAD)"
+            make olm-deploy "REGISTRY_BASE=quay.io/$operator_registry" "VERSION=0.0.1-$(git rev-parse --short HEAD)"
             kubectl -n $BENCHMARK_NAMESPACE apply -f hack/lokistack_gateway_dev.yaml
         fi
         popd
@@ -290,8 +291,7 @@ export_ocp_prometheus_settings() {
     PROMETHEUS_CLIENT_PROTOCOL="https"
     PROMETHEUS_CLIENT_URL="$(kubectl -n openshift-monitoring get route thanos-querier -o json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["spec"]["host"])')"
 
-    secret=$(kubectl -n openshift-user-workload-monitoring get secret | grep prometheus-user-workload-token | head -n 1 | awk '{print $1 }')
-    export PROMETHEUS_TOKEN=$(kubectl -n openshift-user-workload-monitoring get secret $secret -o json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["data"]["token"])' | base64 -d)
+    export PROMETHEUS_TOKEN=$(oc whoami -t)
 }
 
 forward_ports() {
