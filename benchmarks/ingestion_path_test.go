@@ -66,6 +66,8 @@ var _ = Describe("Ingestion Path", func() {
 				job := benchCfg.Metrics.Jobs.Distributor
 				annotation := metrics.DistributorAnnotation
 
+				err = metricsClient.MeasureResourceUsageMetrics(e, job, samplingRange, annotation)
+				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
 				err = metricsClient.MeasureHTTPRequestMetrics(e, metrics.WriteRequestPath, job, samplingRange, annotation)
 				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
 
@@ -79,7 +81,7 @@ var _ = Describe("Ingestion Path", func() {
 				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
 				err = metricsClient.MeasureGRPCRequestMetrics(e, metrics.WriteRequestPath, job, samplingRange, annotation)
 				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
-				err = metricsClient.MeasureBoltDBShipperRequestMetrics(e, metrics.WriteRequestPath, job, samplingRange)
+				err = metricsClient.MeasureIndexRequestMetrics(e, metrics.WriteRequestPath, job, samplingRange)
 				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
 			}, samplingCfg)
 		})

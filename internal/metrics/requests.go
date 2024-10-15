@@ -79,8 +79,9 @@ func RequestDurationQuantile(
 ) Measurement {
 	return Measurement{
 		Name: fmt.Sprintf("%s request duration P%d", name, percentile),
+		// clamp_min is used to avoid NaN which breaks the reporting
 		Query: fmt.Sprintf(
-			`histogram_quantile(0.%d, sum by (job, le) (rate(loki_request_duration_seconds_bucket{job=~".*%s.*", method="%s", route=~"%s", status_code=~"%s"}[%s]))) * %d`,
+			`histogram_quantile(0.%d, sum by (job, le) (clamp_min(rate(loki_request_duration_seconds_bucket{job=~".*%s.*", method="%s", route=~"%s", status_code=~"%s"}[%s]), 0.01))) * %d`,
 			percentile, job, method, route, code, duration, SecondsToMillisecondsMultiplier,
 		),
 		Unit:       MillisecondsUnit,

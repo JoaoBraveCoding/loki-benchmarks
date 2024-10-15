@@ -122,7 +122,7 @@ var _ = Describe("Query Path", func() {
 				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
 				err = metricsClient.MeasureGRPCRequestMetrics(e, metrics.ReadRequestPath, job, samplingRange, annotation)
 				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
-				err = metricsClient.MeasureBoltDBShipperRequestMetrics(e, metrics.ReadRequestPath, job, samplingRange)
+				err = metricsClient.MeasureIndexRequestMetrics(e, metrics.ReadRequestPath, job, samplingRange)
 				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
 			}, samplingCfg)
 		})

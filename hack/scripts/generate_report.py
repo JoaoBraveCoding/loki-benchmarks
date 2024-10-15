@@ -25,14 +25,13 @@ def plot_measurement(measurements, output_dir, plot_index):
         values = measurement['Values']
         units = measurement['Units']
         annotations = measurement.get('Annotations', [])
-        component = annotations[0].capitalize() if annotations else 'Unknown Component'
         
         # Generate time values for x-axis starting from 3 minutes
         time_values = [(i + 1) * 3 for i in range(len(values))]
         
         plt.plot(time_values, values, marker='o', label=description)
     
-    plt.title(f'{component} {name}')
+    plt.title(f'{name}')
     plt.xlabel('Time (minutes)')
     plt.ylabel(f'{units}')
     plt.legend()
@@ -42,7 +41,7 @@ def plot_measurement(measurements, output_dir, plot_index):
     plt.savefig(plot_filename)
     plt.close()
     
-    return f'./plots/plot_{plot_index}.png', f'{component} {name}'
+    return f'./plots/plot_{plot_index}.png', f'{name}'
 
 # Collect all measurements from the provided directories
 all_measurements = {}

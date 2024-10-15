@@ -9,7 +9,7 @@ import (
 
 func ContainerCPU(job string, duration model.Duration, annotation gmeasure.Annotation) Measurement {
 	return Measurement{
-		Name: "Sum of Container CPU Usage",
+		Name: fmt.Sprintf("%s Sum of Container CPU Usage", job),
 		Query: fmt.Sprintf(
 			`sum(avg_over_time(pod:container_cpu_usage:sum{pod=~".*%s.*"}[%s])) * %d`,
 			job, duration, CoresToMillicores,
@@ -21,7 +21,7 @@ func ContainerCPU(job string, duration model.Duration, annotation gmeasure.Annot
 
 func ContainerMemoryWorkingSetBytes(job string, duration model.Duration, annotation gmeasure.Annotation) Measurement {
 	return Measurement{
-		Name: "Sum of Container WorkingSet Memory",
+		Name: fmt.Sprintf("%s Sum of Container WorkingSet Memory", job),
 		Query: fmt.Sprintf(
 			`sum(avg_over_time(container_memory_working_set_bytes{pod=~".*%s.*", container=""}[%s]) / %d)`,
 			job, duration, BytesToGigabytesMultiplier,
@@ -33,7 +33,7 @@ func ContainerMemoryWorkingSetBytes(job string, duration model.Duration, annotat
 
 func ContainerGoMemstatsHeapInuse(job string, _ model.Duration, annotation gmeasure.Annotation) Measurement {
 	return Measurement{
-		Name: "Sum of Container Go Memstats Heap Inuse",
+		Name: fmt.Sprintf("%s Sum of Container Go Memstats Heap Inuse", job),
 		Query: fmt.Sprintf(
 			`sum(go_memstats_heap_inuse_bytes{pod=~".*%s.*"}) / %d`,
 			job, BytesToGigabytesMultiplier,
@@ -45,7 +45,7 @@ func ContainerGoMemstatsHeapInuse(job string, _ model.Duration, annotation gmeas
 
 func PersistentVolumeUsedBytes(job string, duration model.Duration, annotation gmeasure.Annotation) Measurement {
 	return Measurement{
-		Name: "Sum of Persistent Volume Used Bytes",
+		Name: fmt.Sprintf("%s Sum of Persistent Volume Used Bytes", job),
 		Query: fmt.Sprintf(
 			`sum(avg_over_time(kubelet_volume_stats_used_bytes{persistentvolumeclaim=~".*%s.*"}[%s]) / %d)`,
 			job, duration, BytesToGigabytesMultiplier,

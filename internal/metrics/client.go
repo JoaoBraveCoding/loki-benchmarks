@@ -110,7 +110,7 @@ func (c *Client) MeasureGRPCRequestMetrics(
 	}
 }
 
-func (c *Client) MeasureBoltDBShipperRequestMetrics(
+func (c *Client) MeasureIndexRequestMetrics(
 	e *gmeasure.Experiment,
 	path RequestPath,
 	job string,
@@ -249,28 +249,38 @@ func (c *Client) measureCommonRequestMetrics(
 	sampleRange model.Duration,
 	annotation gmeasure.Annotation,
 ) error {
-	var name, code, requestRateName string
+	var name, code, badCode, requestRateName, badRequestRateName string
 
 	if method == GRPCMethod {
-		name = fmt.Sprintf("successful GRPC %s", route)
+		name = fmt.Sprintf("%s successful GRPC %s", job, route)
 		code = "success"
-
 		requestRateName = name
 		if pathRoutes == GRPCReadPathRoutes {
 			requestRateName = "successful GRPC reads"
 		}
 	} else {
-		name = fmt.Sprintf("2xx %s", route)
+		name = fmt.Sprintf("%s 2xx %s", job, route)
 		code = "2.*"
-
 		requestRateName = name
 		if pathRoutes == HTTPReadPathRoutes {
 			requestRateName = "2xx reads"
 		}
+
+		badCode = "5.*"
+		badRequestRateName = fmt.Sprintf("%s 5xx %s", job, route)
+		if pathRoutes == HTTPReadPathRoutes {
+			badRequestRateName = "5xx reads"
+		}
 	}
 
+	// Rate request of 200 or success
 	if err := c.Measure(e, RequestRate(requestRateName, job, pathRoutes, code, sampleRange, annotation)); err != nil {
 		return err
+	}
+	if method != GRPCMethod {
+		if err := c.Measure(e, RequestRate(badRequestRateName, job, pathRoutes, badCode, sampleRange, annotation)); err != nil {
+			return err
+		}
 	}
 	if err := c.Measure(e, RequestDurationAverage(name, job, method, route, code, sampleRange, annotation)); err != nil {
 		return err
