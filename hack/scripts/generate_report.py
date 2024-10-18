@@ -11,12 +11,19 @@ parser.add_argument('dir_paths', type=str, nargs='+', help='Paths to the directo
 args = parser.parse_args()
 
 # Function to load benchmark description from benchmark.yaml
+# Function to load benchmark description from benchmark.yaml
 def load_benchmark_description(dir_path):
     yaml_path = os.path.join(dir_path, 'benchmark.yaml')
     with open(yaml_path) as f:
         benchmark_data = yaml.safe_load(f)
-    return benchmark_data.get('scenarios', {}).get('ingestionPath', {}).get('description', 'Unknown Benchmark')
-
+    
+    ingestion_description = benchmark_data.get('scenarios', {}).get('ingestionPath', {}).get('description')
+    if ingestion_description:
+        return ingestion_description
+    
+    query_description = benchmark_data.get('scenarios', {}).get('queryPath', {}).get('description', 'Unknown Benchmark')
+    return query_description
+    
 # Function to plot a measurement and save as image
 def plot_measurement(measurements, output_dir, plot_index):
     plt.figure(figsize=(10, 6))
