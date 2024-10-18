@@ -42,6 +42,7 @@ type Jobs struct {
 	Querier       string `yaml:"querier"`
 	QueryFrontend string `yaml:"queryFrontend"`
 	IndexGateway  string `yaml:"indexGateway"`
+	Gateway       string `yaml:"gateway"`
 }
 
 type Scenarios struct {

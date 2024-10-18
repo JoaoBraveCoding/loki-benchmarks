@@ -265,6 +265,7 @@ metrics:
     querier: $LOKI_COMPONENT_PREFIX-querier
     queryFrontend: $LOKI_COMPONENT_PREFIX-query-frontend
     indexGateway: $LOKI_COMPONENT_PREFIX-index-gateway
+    gateway: $LOKI_COMPONENT_PREFIX-gateway
 EOF
 
     echo -e "\nCopying scenario configuration"

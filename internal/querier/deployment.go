@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	DefaultImage = "docker.io/grafana/logcli:2.7.3-amd64"
+	DefaultImage = "docker.io/grafana/logcli:3.2.0-amd64"
 )
 
 func CreateQueriers(reader *config.Reader, cfg *config.Querier) []client.Object {
