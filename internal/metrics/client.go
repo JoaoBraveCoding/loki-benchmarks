@@ -252,14 +252,14 @@ func (c *Client) measureCommonRequestMetrics(
 	var name, code, badCode, requestRateName, badRequestRateName string
 
 	if method == GRPCMethod {
-		name = fmt.Sprintf("%s successful GRPC %s", job, route)
+		name = fmt.Sprintf("%s successful GRPC %s", annotation, route)
 		code = "success"
 		requestRateName = name
 		if pathRoutes == GRPCReadPathRoutes {
 			requestRateName = "successful GRPC reads"
 		}
 	} else {
-		name = fmt.Sprintf("%s 2xx %s", job, route)
+		name = fmt.Sprintf("%s 2xx %s", annotation, route)
 		code = "2.*"
 		requestRateName = name
 		if pathRoutes == HTTPReadPathRoutes {
@@ -267,7 +267,7 @@ func (c *Client) measureCommonRequestMetrics(
 		}
 
 		badCode = "5.*"
-		badRequestRateName = fmt.Sprintf("%s 5xx %s", job, route)
+		badRequestRateName = fmt.Sprintf("%s 5xx %s", annotation, route)
 		if pathRoutes == HTTPReadPathRoutes {
 			badRequestRateName = "5xx reads"
 		}
