@@ -46,7 +46,7 @@ var _ = Describe("Query Path", func() {
 			Expect(err).Should(Succeed(), "Failed to wait for ready logger deployment")
 
 			// Begin loading data into the Loki service so there is something to query for.
-			time.Sleep(time.Minute * 5)
+			time.Sleep(time.Minute * time.Duration(queryTest.InitialDelayMinutes()))
 
 			for _, dpl := range querierDpls {
 				err := k8sClient.Create(context.TODO(), dpl, &client.CreateOptions{})
@@ -83,9 +83,16 @@ var _ = Describe("Query Path", func() {
 				err = metricsClient.MeasureIngestionVerificationMetrics(e, generatorDpl.GetName(), samplingRange)
 				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
 
+				// Gateways
+				job := benchCfg.Metrics.Jobs.Gateway
+				annotation := metrics.GatewayAnnotation
+
+				err = metricsClient.MeasureResourceUsageMetrics(e, job, samplingRange, annotation)
+				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))
+
 				// Query Frontend
-				job := benchCfg.Metrics.Jobs.QueryFrontend
-				annotation := metrics.QueryFrontendAnnotation
+				job = benchCfg.Metrics.Jobs.QueryFrontend
+				annotation = metrics.QueryFrontendAnnotation
 
 				err = metricsClient.MeasureResourceUsageMetrics(e, job, samplingRange, annotation)
 				Expect(err).Should(Succeed(), fmt.Sprintf("Failed - %v", err))

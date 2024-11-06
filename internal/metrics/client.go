@@ -277,7 +277,7 @@ func (c *Client) measureCommonRequestMetrics(
 	if err := c.Measure(e, RequestRate(requestRateName, job, pathRoutes, code, sampleRange, annotation)); err != nil {
 		return err
 	}
-	if method != GRPCMethod {
+	if method == HTTPPostMethod {
 		if err := c.Measure(e, RequestRate(badRequestRateName, job, pathRoutes, badCode, sampleRange, annotation)); err != nil {
 			return err
 		}
