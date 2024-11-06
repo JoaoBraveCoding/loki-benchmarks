@@ -43,13 +43,13 @@ export LOKI_STORAGE_BUCKET=jmarcal-loki-benchmark-storage
 
 1. Use the `make run-rhobs-benchmarks` or `make run-operator-benchmarks` to execute the benchmark program with the RHOBS or operator deployment styles on OpenShift respectively.
 Both commands will run all the scenarios under `config/benchmarks/scenarios/benchmarks`.
-2. Upon successful completion of each scenario, a JSON and XML file will be created in the `reports/date+time/schenario_name` directory with the results of the tests.
+2. Upon successful completion of each scenario, a JSON and XML file will be created in the `reports/date+time/scenario_name` directory with the results of the tests.
 3. Once all scenarios have been run we can run `python3 hack/scripts/generate_report.py $PATH_TO_SCENARIO_1 $PATH_TO_SCENARIO_2 $PATH_TO_SCENARIO_...` to compile a report that helps compare the different scenarios.
-4. To share the report on gDoc you can run `pthon3 hack/scripts/create-gdoc.py $PATH_TO_THE_REPORT` this will generate a docx file that can then be shared.
+4. To share the report on gDoc you can run `python3 hack/scripts/create-gdoc.py $PATH_TO_THE_REPORT` this will generate a docx file that can then be shared.
 
 ## Troubleshooting
 
-During benchmark execution, use [hack/scripts/ocp-deploy-grafana.sh](hack/scripts/ocp-deploy-grafana.sh) to deploy grafna and connect to Loki as a datasource:
+During benchmark execution, use [hack/scripts/ocp-deploy-grafana.sh](hack/scripts/ocp-deploy-grafana.sh) to deploy Grafana and connect to Loki as a datasource:
 
 * Use a web browser to access grafana UI. The URL, username and password are printed by the script
 * In the UI, under settings -> data-sources hit `Save & test` to verify that Loki data-source is connected and that there are no errors
