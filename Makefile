@@ -35,6 +35,11 @@ help: ## Display this help.
 lint: $(GOLANGCI_LINT) ## Lint the code
 	@$(GOLANGCI_LINT) run --timeout=4m
 
+.PHONY: lint-fix
+lint-fix: $(GOLANGCI_LINT) ## Attempt to automatically fix lint issues in source code.
+	$(GOLANGCI_LINT) run --fix --timeout=5m ./...
+
+
 create-rhobs-loki-file: ## Create a yaml file with deployment details for Loki using RHOBS configuration
 	curl -O $(LOKI_TEMPLATE_FILE) https://raw.githubusercontent.com/rhobs/configuration/main/resources/services/observatorium-logs-template.yaml
 	oc process -f $(LOKI_TEMPLATE_FILE) -p NAMESPACE=$(LOKI_NAMESPACE) -p LOKI_S3_SECRET=test --param-file $(LOKI_CONFIG_FILE) >> $(RHOBS_DEPLOYMENT_FILE)

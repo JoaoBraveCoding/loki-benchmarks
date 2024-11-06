@@ -9,7 +9,6 @@ import (
 	"github.com/observatorium/loki-benchmarks/internal/loadclient"
 	"github.com/observatorium/loki-benchmarks/internal/metrics"
 	"github.com/observatorium/loki-benchmarks/internal/utils"
-
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gmeasure"
