@@ -3,7 +3,7 @@ version: 2
 jobs:
   lint:
     docker:
-      - image: golang:1.20
+      - image: golang:1.22
     working_directory: ~/loki-benchmarks
     steps:
       - checkout
