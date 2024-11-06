@@ -7,7 +7,7 @@ include .bingo/Variables.mk
 
 LOKI_NAMESPACE := observatorium-logs-test
 
-LOKI_OPERATOR_REGISTRY ?= openshift-logging
+LOKI_OPERATOR_REGISTRY_BASE ?= quay.io/openshift-logging
 LOKI_STORAGE_BUCKET ?= loki-benchmark-storage
 
 LOKI_CONFIG_FILE ?= hack/rhobs-loki-parameters.yaml
@@ -64,5 +64,5 @@ run-operator-benchmarks: $(GINKGO) $(PROMETHEUS) ## Run benchmark on an OpenShif
 	BENCHMARK_NAMESPACE=$(LOKI_NAMESPACE) \
 	LOKI_COMPONENT_PREFIX="lokistack-dev" \
 	BENCHMARKING_CONFIGURATION_DIRECTORY="operator" \
-	./run.sh operator $(LOKI_OPERATOR_REGISTRY) $(LOKI_STORAGE_BUCKET)
+	./run.sh operator $(LOKI_OPERATOR_REGISTRY_BASE) $(LOKI_STORAGE_BUCKET)
 .PHONY: run-benchmarks

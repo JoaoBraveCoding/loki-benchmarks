@@ -77,7 +77,7 @@ rhobs() {
 # Deploy Loki with the Red Hat Loki Operator
 # Intended to work on a OpenShift cluster for benchmarking
 operator() {
-    operator_registry=$1
+    operator_registry_base=$1
     storage_bucket=$2
 
     if $IS_OPENSHIFT; then
@@ -97,11 +97,11 @@ operator() {
             kubectl label ns/openshift-operators-redhat openshift.io/cluster-monitoring=true --overwrite 
             kubectl label ns/$BENCHMARK_NAMESPACE openshift.io/cluster-monitoring=true --overwrite 
 
-            make olm-deploy "REGISTRY_BASE=quay.io/$operator_registry" "VERSION=0.0.1-$(git rev-parse --short HEAD)" VARIANT=openshift
+            make olm-deploy "REGISTRY_BASE=$operator_registry_base" "VERSION=0.0.1-$(git rev-parse --short HEAD)" VARIANT=openshift
             ./hack/deploy-aws-storage-secret.sh $storage_bucket
             kubectl -n $BENCHMARK_NAMESPACE apply -f hack/lokistack_gateway_ocp.yaml
         else
-            make olm-deploy "REGISTRY_BASE=quay.io/$operator_registry" "VERSION=0.0.1-$(git rev-parse --short HEAD)"
+            make olm-deploy "REGISTRY_BASE=$operator_registry_base" "VERSION=0.0.1-$(git rev-parse --short HEAD)"
             kubectl -n $BENCHMARK_NAMESPACE apply -f hack/lokistack_gateway_dev.yaml
         fi
         popd

@@ -24,19 +24,19 @@ To change the testing configuration, see the files in the [config](./config) dir
 
 Different scenarios can be customized under `config/benchmarks/scenarios/benchmarks`. Current the benchmarks support two testing scenarios:
 
-* Ingestion path scenarios: [suppored configuration](https://github.com/observatorium/loki-benchmarks/blob/1a0a9e8f6190475b6c1bfacb5a31a88bd76cbb36/internal/config/config.go#L76-L81), this test will generate X amount of logs throughout a 30 minute window that's supposed to represent a full day of log ingestion.
-* Query path scenarios: [supported configuration](https://github.com/observatorium/loki-benchmarks/blob/1a0a9e8f6190475b6c1bfacb5a31a88bd76cbb36/internal/config/config.go#L102-L108), the theory behind this test is to generate the amount of data that would be queried before it starts running the queries.
+* Ingestion path scenarios: [suppored configuration](./internal/config/config.go#L77), this test will generate X amount of logs throughout a 30 minute window that's supposed to represent a full day of log ingestion.
+* Query path scenarios: [supported configuration](./internal/config/config.go#L103), the theory behind this test is to generate the amount of data that would be queried before it starts running the queries.
 
 ## Running Benchmarks
 
 ### Prerequisites
 
-The `run-operator-benchmarks` expects the following two env vars to be set `LOKI_OPERATOR_REGISTRY` `LOKI_STORAGE_BUCKET`.
+The `run-operator-benchmarks` expects the following two env vars to be set `LOKI_OPERATOR_REGISTRY_BASE` `LOKI_STORAGE_BUCKET`.
 E.g
 
 ```shell
-export LOKI_OPERATOR_REGISTRY=jmarcal
-export LOKI_STORAGE_BUCKET=jmarcal-loki-benchmark-storage
+export LOKI_OPERATOR_REGISTRY_BASE=quay.io/myorg
+export LOKI_STORAGE_BUCKET=myname-loki-benchmark-storage
 ```
 
 ### Steps
